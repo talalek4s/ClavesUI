@@ -1,10 +1,13 @@
 package com.example.clavesui;
 
 import javafx.application.Application;
+import javafx.beans.property.*;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -14,6 +17,9 @@ import java.util.Scanner;
 
 public class ContrasenaUI extends Application {
 
+    StringProperty title = new SimpleStringProperty();
+    String mensaje;
+
     public static void main(String[] args) {
         launch();
     }
@@ -21,25 +27,38 @@ public class ContrasenaUI extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        String mensaje;
-        mensaje = KeyGenerator();
+        int longitudCadena = 8;
+        Button button = new Button(" click aqui ");
+        Button buttonCerrar = new Button("Cerrar");
 
-        Label label = new Label("contrasena: ");
-        TextField textField = new TextField(mensaje);
+
+        Label label = new Label("Numero de  caracteres: ");
+        TextField textField = new TextField("");
+        TextField textFieldContrasena = new TextField("");
+
 
         HBox hBox = new HBox(label, textField);
-        Scene scene = new Scene(hBox, 320, 240);
-        stage.setTitle("Mensaje ");
+        VBox vBox = new VBox( hBox, button, textFieldContrasena, buttonCerrar);
+
+        button.setOnAction(e -> {
+            Integer valor = Integer.valueOf(textField.getText());
+            mensaje =  KeyGenerator(valor);
+            textFieldContrasena.setText(mensaje);
+        });
+
+        buttonCerrar.setOnAction(e -> stage.close());
+
+        Scene scene = new Scene(vBox, 320, 240);
+        stage.setTitle(mensaje);
         stage.setScene(scene);
         stage.show();
     }
 
-    String KeyGenerator() {
+    String KeyGenerator(int lCadena) {
 
-        // public static void main(String[] args) {
 
         String clave = "";
-        Contrasena contrasena = new Contrasena("", 8);
+        Contrasena contrasena = new Contrasena("", 13);
         char[] mayusculas = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
         char[] minusculas = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
         char[] signo = {'!','"','#','$','%','&', '(',')','*','+', ',','-','.','/', ':',';','<','=','>','?','@', '[',']','^','_', '{','|','}','~'};
@@ -49,9 +68,9 @@ public class ContrasenaUI extends Application {
         int grupo;
         int numeroCaracter;
         String letra;
-        int respuesta = 0;
+       // int respuesta = 0;
 
-        do{
+/*        do{
 
             Scanner reader = new Scanner(System.in);
             System.out.println("Ingrese un entero mayor que 8 y menor que 50");
@@ -60,7 +79,9 @@ public class ContrasenaUI extends Application {
             if(longitudClave >= 8 && longitudClave <= 50) respuesta = 1;
             else System.out.println("Longitud erronea, vuelva a intentar ");
 
-        }while(respuesta != 1);
+        }while(respuesta != 1);*/
+
+        longitudClave = lCadena;
 
         for(int i = 1; i <= longitudClave; i++){
 
@@ -94,8 +115,6 @@ public class ContrasenaUI extends Application {
 
         contrasena.setContrasena(clave);
         System.out.println(contrasena.getContrasena());
-
-        //}//main
 
         return contrasena.getContrasena();
     }
