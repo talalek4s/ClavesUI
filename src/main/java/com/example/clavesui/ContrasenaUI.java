@@ -41,9 +41,29 @@ public class ContrasenaUI extends Application {
         VBox vBox = new VBox( hBox, button, textFieldContrasena, buttonCerrar);
 
         button.setOnAction(e -> {
-            Integer valor = Integer.valueOf(textField.getText());
-            mensaje =  KeyGenerator(valor);
-            textFieldContrasena.setText(mensaje);
+            int valido = 0;
+            do {
+                valido = esNumero(textField.getText());
+                if (valido == 0){
+                    System.out.println("Intente de nuevo ");
+                    break;
+                }
+                else {
+
+                Integer valor = Integer.valueOf(textField.getText());
+
+                if (valor >= 8 && valor <=50) {
+
+                    mensaje = KeyGenerator(valor);
+                    textFieldContrasena.setText(mensaje);
+                  }
+                else{
+                    System.out.println("Longitud erronea vuelva a intentar ");
+                    valido = 0;
+                    break;
+                 }
+                }
+            }while (valido == 0);
         });
 
         buttonCerrar.setOnAction(e -> stage.close());
@@ -129,6 +149,24 @@ public class ContrasenaUI extends Application {
         semilla = semilla %dato;
 
         return semilla;
+    }
+
+    public  static  int esNumero(String string){
+
+        int intValor;
+
+        if(string == null || string.equals("")){
+            System.out.println("No numero ");
+            return  0;
+        }
+        try{
+            intValor = Integer.parseInt(string);
+            return 1;
+        }catch (NumberFormatException e){
+            System.out.println("No es un numero ");
+            return 0;
+        }
+
     }
 
 }
